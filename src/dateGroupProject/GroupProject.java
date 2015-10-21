@@ -41,126 +41,55 @@ public class GroupProject {
 		// inputs for the dates
 		// this will work for all dates from 14/09/1752, the date Gregorian calendar was adopted by UK
 		
-		switch (month1) {
-		case 1:
-			daysInMonth1 = 0;
-			// January
-			break;
-		case 2:
-			daysInMonth1 = 31;
-			// February
-			break;
-		case 3:
-			daysInMonth1 = 31 + 28;
-			// March
-			break;
-		case 4:
-			daysInMonth1 = 31 + 28 + 31;
-			//April
-			break;
-		case 5: 
-			daysInMonth1 =  31 + 28 + 31 + 30;
-			// May
-			break;
-		case 6:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31;
-			break;
-			// June
-		case 7: 
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30;
-			break;
-			// July
-		case 8:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30 + 31;
-			break;
-			// August
-		case 9:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31;
-			// September 
-			break;
-		case 10:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30;
-			// October
-			break;
-		case 11:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
-			break;
-			//November
-		case 12:
-			daysInMonth1 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
-			break;
-			//December
-		default:
-			System.out.println("please enter a valid month");
-			break;
-		}
+		daysInMonth1 =totalDaysInMonth(month1,daysInMonth1);
+		daysInMonth2 =totalDaysInMonth(month2,daysInMonth2);
+		//call to the total days method, returning total number of days from month entered.
 		
-		switch (month2) {
-		case 1:
-			daysInMonth2 = 0;
-			// January
-			break;
-		case 2:
-			daysInMonth2 = 31;
-			// February
-			break;
-		case 3:
-			daysInMonth2 = 31 + 28;
-			// March
-			break;
-		case 4:
-			daysInMonth2 = 31 + 28 + 31;
-			//April
-			break;
-		case 5: 
-			daysInMonth2 =  31 + 28 + 31 + 30;
-			// May
-			break;
-		case 6:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31;
-			break;
-			// June
-		case 7: 
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30;
-			break;
-			// July
-		case 8:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30 + 31;
-			break;
-			// August
-		case 9:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31;
-			// September 
-			break;
-		case 10:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30;
-			// October
-			break;
-		case 11:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
-			break;
-			//November
-		case 12:
-			daysInMonth2 = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
-			//December
-			break;
-		default:
-			System.out.println("please enter a valid month");
-			break;	
-		}
-		
-		daysInYear1 = year1 * 365.2425 ;
-		daysInYear2 = year2 * 365.2425 ;
+		daysInYear1 = year1 * 365.2425;
+		daysInYear2 = year2 * 365.2425;
 		
 		totalDays1 = daysInYear1 + daysInMonth1 + day1;
+		System.out.println(totalDays1);
 		totalDays2 = daysInYear2 + daysInMonth2 + day2;
+		System.out.println(totalDays2);
 		
 		if (totalDays2 > totalDays1 ){
 			double x = totalDays1;
 			totalDays1 = totalDays2;
 			totalDays2 = x;
 		}
-		dateDifference = (int) (totalDays1 - totalDays2);
+		dateDifference = (int)Math.round(totalDays1 - totalDays2);
+		// takes care of rounding issues as it rounds down when changing from double to integer. 
 		System.out.println("The difference between the two dates is " + dateDifference +" days.");
 	}
+	static public int totalDaysInMonth(int month,int daysInMonth){
+		for (int count = month;count>1;--count){
+			if(count == 3){
+				daysInMonth += 28;
+			}else{
+				if(count >= 9){
+					if(count % 2 == 0){
+						daysInMonth += 30;
+					}else{
+						daysInMonth += 31;
+					}
+				}
+				else{
+					if(count % 2 == 0){
+						daysInMonth += 31;
+					}else{
+						daysInMonth += 30;
+					}
+				}
+			}	
+		}
+		return daysInMonth;
+		/* parses in two parameters, the month and daysInMonth, we calculate the number of days from the month entered.
+		*  we never include any days from December because this will be given to us from the user input, hence count is 
+		*  always bigger than the number of days in a month that we're calculating by 1
+		*  pattern is 31 days for odd number months and 30 for even, exception is February which has 28 days.
+		*  pattern is the same until August where it then becomes 30 for odd and 31 for even.
+		*/
+	}
+	
 }
